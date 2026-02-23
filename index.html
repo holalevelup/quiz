@@ -737,7 +737,18 @@ function render() {
 function pick(i) {
   answers[cur] = i;
   document.getElementById('btn-next').disabled = false;
-  render();
+  // Update option styles in-place — no re-render, no flicker
+  document.querySelectorAll('.option').forEach((el, idx) => {
+    if (idx === i) {
+      el.classList.add('selected');
+      el.querySelector('.opt-letter').style.background = 'var(--violet)';
+      el.querySelector('.opt-letter').style.color = 'var(--white)';
+    } else {
+      el.classList.remove('selected');
+      el.querySelector('.opt-letter').style.background = '';
+      el.querySelector('.opt-letter').style.color = '';
+    }
+  });
 }
 
 function goNext() {
