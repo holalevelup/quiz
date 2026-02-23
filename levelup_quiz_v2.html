@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Cuál es tu perfil? — Level Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:        #bed35a;
+    --green-dark:   #a0b84a;
+    --green-pale:   #f4f9e6;
+    --violet:       #7160ef;
+    --violet-dark:  #5a4cd4;
+    --violet-pale:  #ede9fd;
+    --lila:         #b79cee;
+    --lila-pale:    #f3effc;
+    --white:        #ffffff;
+    --off:          #f8f8f8;
+    --dark:         #1a1a2a;
+    --gray:         #6b7280;
+    --gray-light:   #e5e7eb;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--violet);
+    height: 5px;
+    width: 100%;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 52px 0 0;
+    text-align: center;
+  }
+
+  .logo-text {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    animation: up .5s ease forwards .05s;
+  }
+
+  .logo-text span {
+    display: inline-block;
+    background: var(--green);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .header h1 {
+    font-size: clamp(30px, 7vw, 48px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: up .6s ease forwards .15s;
+  }
+
+  .header h1 strong {
+    color: var(--violet);
+  }
+
+  .header p {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--gray);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto 44px;
+    opacity: 0;
+    animation: up .6s ease forwards .25s;
+  }
+
+  .start-wrap {
+    opacity: 0;
+    animation: up .5s ease forwards .35s;
+    margin-bottom: 16px;
+  }
+
+  .tag-time {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--gray);
+    opacity: 0;
+    animation: up .4s ease forwards .45s;
+    margin-bottom: 56px;
+  }
+
+  /* ── DIVIDER DECO ── */
+  .deco-strip {
+    display: flex;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 0 44px;
+    opacity: 0;
+    animation: up .4s ease forwards .5s;
+  }
+
+  .deco-strip div { flex: 1; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--gray-light);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--violet), var(--lila));
+    border-radius: 2px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+  }
+
+  .progress-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray);
+    text-align: right;
+    letter-spacing: 1px;
+  }
+
+  /* ── QUESTION ── */
+  .q-card {
+    background: var(--off);
+    border-radius: 20px;
+    padding: 36px 36px 28px;
+    margin-bottom: 18px;
+    animation: up .4s ease forwards;
+  }
+
+  @media (max-width: 500px) {
+    .q-card { padding: 24px 18px 20px; }
+  }
+
+  .q-chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--violet);
+    background: var(--violet-pale);
+    border-radius: 100px;
+    padding: 4px 12px;
+    margin-bottom: 18px;
+  }
+
+  .q-text {
+    font-size: clamp(17px, 3.5vw, 22px);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 28px;
+    color: var(--dark);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 15px 18px;
+    background: var(--white);
+    border: 2px solid var(--gray-light);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: border-color .18s, background .18s, transform .18s;
+    text-align: left;
+    width: 100%;
+    color: var(--dark);
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  .option:hover {
+    border-color: var(--lila);
+    background: var(--lila-pale);
+    transform: translateX(3px);
+  }
+
+  .option.selected {
+    border-color: var(--violet);
+    background: var(--violet-pale);
+  }
+
+  .opt-letter {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--gray-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: background .18s, color .18s;
+  }
+
+  .option.selected .opt-letter {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .opt-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--dark);
+    padding-top: 3px;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all .18s;
+    letter-spacing: .3px;
+  }
+
+  .btn-primary {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--violet-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(113,96,239,.28);
+  }
+
+  .btn-primary:disabled {
+    background: var(--gray-light);
+    color: var(--gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray);
+    border: 2px solid var(--gray-light);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--lila);
+    color: var(--violet);
+  }
+
+  /* ── RESULT ── */
+  .result-header {
+    text-align: center;
+    padding: 52px 0 36px;
+    animation: up .5s ease forwards;
+  }
+
+  .profile-emoji {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: scale(.6);
+    animation: pop .5s cubic-bezier(.34,1.56,.64,1) forwards .15s;
+  }
+
+  @keyframes pop {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .result-chip {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--violet); background: var(--violet-pale);
+    border-radius: 100px; padding: 5px 14px;
+    display: inline-block; margin-bottom: 14px;
+    opacity: 0; animation: up .4s ease forwards .3s;
+  }
+
+  .result-name {
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 700; line-height: 1.1;
+    margin-bottom: 10px;
+    opacity: 0; animation: up .4s ease forwards .38s;
+  }
+
+  .result-tagline {
+    font-size: 15px; font-weight: 500;
+    color: var(--gray); font-style: italic;
+    margin-bottom: 0;
+    opacity: 0; animation: up .4s ease forwards .46s;
+  }
+
+  .result-block {
+    background: var(--off);
+    border-radius: 18px;
+    padding: 28px 30px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 500px) {
+    .result-block { padding: 22px 18px; }
+  }
+
+  .block-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-block p {
+    font-size: 14.5px; font-weight: 500;
+    line-height: 1.7; color: #374151;
+  }
+
+  .signal-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+
+  .signal-list li {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 14px; font-weight: 500;
+    line-height: 1.5; color: #374151;
+  }
+
+  .signal-list li::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0; margin-top: 6px;
+  }
+
+  /* ── SCORE BARS ── */
+  .bars { display: flex; flex-direction: column; gap: 11px; }
+
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+
+  .bar-label {
+    font-size: 12px; font-weight: 600;
+    color: var(--gray);
+    width: 160px; flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1; height: 8px;
+    background: var(--gray-light);
+    border-radius: 4px; overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%; border-radius: 4px;
+    width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── CTA ── */
+  .cta-box {
+    background: var(--violet);
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .cta-box h3 {
+    font-size: 20px; font-weight: 700;
+    color: var(--white); margin-bottom: 10px;
+  }
+
+  .cta-box p {
+    font-size: 14px; font-weight: 500;
+    color: rgba(255,255,255,.75);
+    line-height: 1.6; margin-bottom: 26px;
+  }
+
+  .btn-cta {
+    display: inline-block;
+    background: var(--green);
+    color: var(--dark);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14px; font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all .18s;
+    letter-spacing: .3px;
+  }
+
+  .btn-cta:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  }
+
+  .restart-btn {
+    display: block; margin: 20px auto 0;
+    background: none; border: none;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gray); cursor: pointer;
+    transition: color .18s;
+  }
+
+  .restart-btn:hover { color: var(--violet); }
+
+  /* ── UTILS ── */
+  .hidden { display: none !important; }
+
+  @keyframes up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<div class="container">
+
+  <!-- ══ INTRO ══ -->
+  <div id="intro">
+    <div class="header">
+      <div class="logo-text"><span></span> level up <span></span></div>
+      <h1>¿Cómo sonás en<br>una <strong>entrevista</strong>?</h1>
+      <p>8 preguntas basadas en el análisis de 175 entrevistas reales a profesionales LATAM. Descubrí tu perfil comunicacional en inglés.</p>
+    </div>
+    <div class="start-wrap" style="text-align:center">
+      <button class="btn btn-primary" onclick="startQuiz()" style="font-size:15px; padding:18px 52px;">
+        Empezar diagnóstico →
+      </button>
+    </div>
+    <p class="tag-time" style="text-align:center; margin-top:14px;">Menos de 3 minutos</p>
+
+    <div class="deco-strip">
+      <div style="background:var(--violet)"></div>
+      <div style="background:var(--lila)"></div>
+      <div style="background:var(--green)"></div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div id="quiz" class="hidden">
+    <div style="padding-top:40px">
+      <div class="progress-wrap">
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill"></div>
+        </div>
+        <div class="progress-label" id="prog-label"></div>
+      </div>
+      <div id="q-area"></div>
+      <div class="nav">
+        <button class="btn btn-ghost" id="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn btn-primary" id="btn-next" onclick="goNext()" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div id="result" class="hidden"></div>
+
+</div><!-- /container -->
+
+<script>
+// ── PERFILES ─────────────────────────────────────────────────────────
+const PROFILES = {
+  ES: {
+    emoji: "🔇",
+    name: "Ejecutor Silencioso",
+    tagline: "Hacés el trabajo. No sabés cómo venderlo.",
+    color: "#ef4444",
+    colorBar: "linear-gradient(90deg,#ef4444,#f87171)",
+    desc: "Sos alguien que entrega resultados reales en el día a día, pero en la entrevista eso desaparece. Hablás poco, respondés justo lo que preguntan y esperás que el CV hable por vos. El problema es que en entrevistas en inglés, el CV no habla — tenés que hablar vos.",
+    signals: [
+      "Respuestas cortas que cortan la conversación",
+      "No mencionás números ni resultados casi nunca",
+      "Sentís que no querés exagerar ni presumir",
+      "Esperás que el entrevistador haga las preguntas correctas",
+      "Describís lo que hacés, no el impacto de lo que hacés",
+    ],
+    work: "El trabajo no es hablar más — es aprender a decir lo correcto en menos palabras. Necesitás estructura, no volumen.",
+  },
+  SM: {
+    emoji: "📢",
+    name: "Sobreexplicador",
+    tagline: "Tenés mucho para decir. Todo a la vez.",
+    color: "#f59e0b",
+    colorBar: "linear-gradient(90deg,#f59e0b,#fcd34d)",
+    desc: "Tus respuestas son largas, completas y detalladas. Eso en papel suena bien — pero en una entrevista de 45 minutos con un recruiter americano, perdés su atención antes de llegar al punto. El contexto que vos considerás esencial, ellos lo viven como ruido.",
+    signals: [
+      "Llegás al resultado cuando la pregunta ya quedó atrás",
+      "Cada respuesta tiene tres introducciones",
+      "Creés que sin contexto la respuesta no se entiende",
+      "Cuando terminás de hablar, sentís que hablaste demasiado",
+      "El/la entrevistador/a te interrumpe o te redirige seguido",
+    ],
+    work: "El trabajo es aprender a filtrar: qué va primero, qué queda afuera. Una respuesta de 60 segundos bien estructurada gana siempre a una de 3 minutos completa.",
+  },
+  TM: {
+    emoji: "🧠",
+    name: "Traductor Mental",
+    tagline: "Pensás en español. Hablás en inglés. El costo es alto.",
+    color: "#7160ef",
+    colorBar: "linear-gradient(90deg,#7160ef,#b79cee)",
+    desc: "Tu inglés es funcional, pero hay un paso extra entre tu cabeza y tu boca: traducís en tiempo real. Eso genera pausas, frases a medias, y la sensación de que no estás diciendo lo que realmente querías decir. El entrevistador lo percibe como inseguridad, aunque no lo sea.",
+    signals: [
+      "Pausas largas antes de responder mientras organizás en español",
+      "Cambiás lo que ibas a decir a mitad porque la palabra no viene",
+      "Terminás con 'something like that' o 'I don't know how to say it'",
+      "En español serías mucho más articulado/a",
+      "El estrés de la entrevista empeora todo",
+    ],
+    work: "El objetivo no es eliminar el acento ni sonar nativo. Es pensar directamente en inglés cuando importa. Eso se entrena.",
+  },
+  BI: {
+    emoji: "🎭",
+    name: "Buen Inglés, Sin Evidencia",
+    tagline: "Sonás bien. Pero no convencés.",
+    color: "#6b7280",
+    colorBar: "linear-gradient(90deg,#6b7280,#9ca3af)",
+    desc: "Tu inglés es tu fortaleza — y también tu trampa. Como la fluidez está resuelta, nunca trabajaste la parte de fondo: qué decís, no cómo lo decís. Respondés con confianza pero de forma genérica. El entrevistador se queda con una buena impresión general y ningún dato concreto.",
+    signals: [
+      "Respuestas fluidas pero sin números ni resultados",
+      "Usás frases como 'I'm a team player' sin ejemplo concreto",
+      "No conectás tus respuestas con el rol específico",
+      "Terminás pensando que fue bien y después no llamaron",
+      "Tu mayor ventaja (el inglés) te da falsa confianza en el resto",
+    ],
+    work: "Tu trabajo es el contenido. Necesitás aprender a construir respuestas con estructura y evidencia — el inglés ya lo tenés.",
+  },
+  NH: {
+    emoji: "⭐",
+    name: "Natural Hire",
+    tagline: "Comunicás como alguien que sabe lo que vale.",
+    color: "#bed35a",
+    colorBar: "linear-gradient(90deg,#bed35a,#d4e87a)",
+    desc: "Aparecés en menos del 6% de las entrevistas que analizamos. Tus respuestas tienen estructura, evidencia y convicción. Combinás claridad con impacto. No hablás de tareas — hablás de decisiones y resultados. Eso es lo que un entrevistador americano necesita para decir 'this is our person'.",
+    signals: [
+      "Usás frases como 'I decided', 'I proposed', 'I led'",
+      "Tus respuestas tienen inicio, medio y fin",
+      "Incluís números o resultados concretos cuando podés",
+      "Conectás lo que hiciste con el valor que generó",
+      "Al terminar la entrevista sabés bien lo que transmitiste",
+    ],
+    work: "Estás en el lugar correcto. El trabajo ahora es afilar: consistencia, simulación bajo presión, y ajustar las respuestas al rol específico.",
+  },
+};
+
+// ── PREGUNTAS (opciones mezcladas, perfil oculto) ────────────────────
+// Cada pregunta tiene 5 opciones, una por perfil, en orden ALEATORIO (no siempre el mismo)
+const RAW_QUESTIONS = [
+  {
+    text: "Te piden que te presentes. ¿Cómo arrancás?",
+    options: [
+      { text: "Digo mi nombre, el cargo actual y paro ahí. No quiero abrumar con información de más.", p: "ES" },
+      { text: "Arranco desde el primer trabajo si me dejan. Cada etapa tiene contexto importante que explicar.", p: "SM" },
+      { text: "Sé bien lo que quiero decir, pero cuando empiezo a hablar en inglés pierdo el hilo.", p: "TM" },
+      { text: "Me presento con fluidez, pero después no sé muy bien hacia dónde dirigir la conversación.", p: "BI" },
+      { text: "Voy al punto: quién soy, qué hice, qué impacto tuve y por qué estoy acá.", p: "NH" },
+    ]
+  },
+  {
+    text: "\"Tell me about a time when you had a positive impact.\" ¿Qué hacés?",
+    options: [
+      { text: "Cuento una situación pero no llego a decir bien cómo la resolví. Me cuesta ponerme como protagonista.", p: "ES" },
+      { text: "Explico el contexto en detalle — el equipo, el proyecto, la empresa — y a veces no llego al resultado.", p: "SM" },
+      { text: "Tengo la historia perfecta en la cabeza pero en inglés sale fragmentada, con pausas largas.", p: "TM" },
+      { text: "Lo cuento bien en inglés pero al terminar me doy cuenta que nunca dije cuál fue el resultado concreto.", p: "BI" },
+      { text: "Uso estructura: contexto en una oración, lo que decidí hacer y por qué, y el resultado medible.", p: "NH" },
+    ]
+  },
+  {
+    text: "\"What would you say is your biggest strength?\"",
+    options: [
+      { text: "Doy varios ejemplos de distintos trabajos para que quede bien claro. Prefiero que sobren evidencias.", p: "SM" },
+      { text: "Sé cuál es mi fortaleza real, pero explicarla en inglés me lleva tiempo y termino sonando poco convincente.", p: "TM" },
+      { text: "Elijo una fortaleza relevante para el puesto y la respaldo con un ejemplo concreto.", p: "NH" },
+      { text: "Digo algo como 'I'm very organized' y espero que siga preguntando. No sé bien cómo desarrollarlo.", p: "ES" },
+      { text: "Respondo con confianza y buena pronunciación, pero elijo algo genérico porque no sé conectarlo al rol.", p: "BI" },
+    ]
+  },
+  {
+    text: "¿Cómo describís tu rol actual cuando te preguntan?",
+    options: [
+      { text: "Empiezo a explicar pero mezclo español e inglés mentalmente y las frases quedan a medias.", p: "TM" },
+      { text: "Lo describo bien en inglés. El problema es que no logro transmitir por qué lo que hago importa.", p: "BI" },
+      { text: "Arranco por el impacto: qué problema resuelvo, para quién y con qué resultados.", p: "NH" },
+      { text: "Enumero mis responsabilidades. 'I manage the reports, I send the emails, I coordinate the team.'", p: "ES" },
+      { text: "Explico el organigrama, cómo funciona el área, los procesos del equipo, y después llego a lo que yo hago.", p: "SM" },
+    ]
+  },
+  {
+    text: "El/la entrevistador/a no entiende algo y te pide que lo expliques de otra manera. ¿Qué pasa?",
+    options: [
+      { text: "Simplifico: elijo una sola idea central y la explico con un ejemplo concreto.", p: "NH" },
+      { text: "Me congelo un poco. Lo repito casi igual porque no sé cómo reformularlo.", p: "ES" },
+      { text: "Agrego más contexto y más detalles. La explicación se vuelve aún más larga.", p: "SM" },
+      { text: "Lo reformulo bien en inglés, pero cuando termino no estoy seguro/a si respondí lo que preguntaban.", p: "BI" },
+      { text: "Me bloqueo. Sé la respuesta pero el estrés de hablar en inglés me hace perder el hilo.", p: "TM" },
+    ]
+  },
+  {
+    text: "\"Why do you want to leave your current job?\" ¿Cómo respondés?",
+    options: [
+      { text: "Lo digo directo y positivo: hacia dónde voy, no de qué huyo. Lo conecto con el rol al que aplico.", p: "NH" },
+      { text: "Tengo claro por qué me voy pero articularlo en inglés de forma profesional me cuesta mucho.", p: "TM" },
+      { text: "Doy una respuesta muy corta y vaga. No quiero decir nada que pueda perjudicarme.", p: "ES" },
+      { text: "Tengo una respuesta linda en inglés, pero suena ensayada y sin convicción real.", p: "BI" },
+      { text: "Explico la situación de la empresa, el contexto del mercado, la dinámica del equipo… hasta que me interrumpen.", p: "SM" },
+    ]
+  },
+  {
+    text: "¿Qué pasa con los números y resultados cuando contás tu experiencia?",
+    options: [
+      { text: "Los pongo siempre que puedo. 'We reduced costs by 30%', 'I led a team of 8'.", p: "NH" },
+      { text: "Los menciono pero enterrados en medio de la historia. Cuesta encontrarlos.", p: "SM" },
+      { text: "Los tengo pero cuando hablo en inglés no salen naturalmente. Me olvido en el momento.", p: "TM" },
+      { text: "A veces los menciono, a veces no. Depende de cómo fluya la conversación.", p: "BI" },
+      { text: "No los menciono casi nunca. No sé si está bien decirlos o si suenan presumidos.", p: "ES" },
+    ]
+  },
+  {
+    text: "Al terminar la entrevista, ¿cómo te sentís?",
+    options: [
+      { text: "Siento que no dije suficiente. Había mucho más que podría haber contado.", p: "ES" },
+      { text: "Siento que la conversación estuvo bien pero no sé si logré diferenciarme realmente.", p: "BI" },
+      { text: "Siento que comunicué lo que vine a comunicar. Independientemente del resultado.", p: "NH" },
+      { text: "Siento que hablé demasiado y no estoy seguro/a si fui al punto.", p: "SM" },
+      { text: "Siento que lo que dije fue correcto pero no fue fluido. El inglés me frenó.", p: "TM" },
+    ]
+  },
+];
+
+// ── SHUFFLE HELPER ───────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Build shuffled questions once per session
+let QUESTIONS = [];
+function buildQuestions() {
+  QUESTIONS = RAW_QUESTIONS.map(q => ({
+    text: q.text,
+    options: shuffle(q.options)
+  }));
+}
+
+// ── STATE ────────────────────────────────────────────────────────────
+let cur = 0;
+let answers = []; // index of selected option per question
+
+function startQuiz() {
+  buildQuestions();
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  render();
+}
+
+function render() {
+  const q = QUESTIONS[cur];
+  const LETTERS = ['A','B','C','D','E'];
+
+  document.getElementById('prog-fill').style.width = (cur / QUESTIONS.length * 100) + '%';
+  document.getElementById('prog-label').textContent = `${cur + 1} / ${QUESTIONS.length}`;
+  document.getElementById('btn-back').style.visibility = cur === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').disabled = answers[cur] === undefined;
+  document.getElementById('btn-next').textContent = cur === QUESTIONS.length - 1 ? 'Ver mi perfil →' : 'Siguiente →';
+
+  document.getElementById('q-area').innerHTML = `
+    <div class="q-card">
+      <div class="q-chip">Pregunta ${cur + 1}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option ${answers[cur] === i ? 'selected' : ''}" onclick="pick(${i})">
+            <span class="opt-letter">${LETTERS[i]}</span>
+            <span class="opt-text">${opt.text}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function pick(i) {
+  answers[cur] = i;
+  document.getElementById('btn-next').disabled = false;
+  render();
+}
+
+function goNext() {
+  if (answers[cur] === undefined) return;
+  if (cur === QUESTIONS.length - 1) showResult();
+  else { cur++; render(); }
+}
+
+function goBack() {
+  if (cur > 0) { cur--; render(); }
+}
+
+// ── RESULT ───────────────────────────────────────────────────────────
+function showResult() {
+  // Tally
+  const scores = { ES: 0, SM: 0, TM: 0, BI: 0, NH: 0 };
+  answers.forEach((ans, qi) => {
+    scores[QUESTIONS[qi].options[ans].p]++;
+  });
+
+  const winner = Object.entries(scores).sort((a,b) => b[1]-a[1])[0][0];
+  const p = PROFILES[winner];
+
+  document.getElementById('quiz').classList.add('hidden');
+  const div = document.getElementById('result');
+  div.classList.remove('hidden');
+
+  const profileOrder = ['NH','ES','SM','TM','BI'];
+
+  div.innerHTML = `
+    <div class="result-header">
+      <span class="profile-emoji">${p.emoji}</span>
+      <div class="result-chip">Tu perfil comunicacional</div>
+      <div class="result-name">${p.name}</div>
+      <div class="result-tagline">${p.tagline}</div>
+    </div>
+
+    <div class="result-block" style="border-left: 4px solid ${p.color}">
+      <div class="block-label" style="color:${p.color}">Qué significa</div>
+      <p>${p.desc}</p>
+    </div>
+
+    <div class="result-block">
+      <div class="block-label" style="color:var(--violet)">Señales que lo delatan</div>
+      <ul class="signal-list">
+        ${p.signals.map(s => `<li style="--dot:${p.color}">${s}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="result-block">
+      <div class="block-label" style="color:var(--violet)">El trabajo concreto</div>
+      <p>${p.work}</p>
+    </div>
+
+    <div class="result-block">
+      <div class="block-label" style="color:var(--violet)">Tu distribución de perfil</div>
+      <div class="bars" id="bars">
+        ${profileOrder.map(k => `
+          <div class="bar-row">
+            <div class="bar-label">${PROFILES[k].emoji} ${PROFILES[k].name}</div>
+            <div class="bar-track">
+              <div class="bar-fill" data-w="${(scores[k]/QUESTIONS.length*100).toFixed(0)}"
+                style="background:${PROFILES[k].colorBar}"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h3>¿Querés trabajarlo en sesiones 1:1?</h3>
+      <p>Level Up es un programa de preparación para entrevistas en inglés basado en el análisis de más de 175 entrevistas reales. Trabajamos tu perfil específico.</p>
+      <a class="btn-cta" href="https://holalevelup.tiendup.com/" target="_blank">Conocer el programa →</a>
+    </div>
+
+    <button class="restart-btn" onclick="restart()">↺ Hacerlo de nuevo</button>
+  `;
+
+  // Dot colors via CSS
+  document.querySelectorAll('.signal-list li').forEach(li => {
+    li.style.setProperty('--dot', p.color);
+  });
+  document.querySelectorAll('.signal-list li::before');
+
+  // Add a real dot element since ::before with var() can be tricky
+  document.querySelectorAll('.signal-list li').forEach(li => {
+    const dot = document.createElement('span');
+    dot.style.cssText = `display:inline-block;width:7px;height:7px;border-radius:50%;background:${p.color};flex-shrink:0;margin-top:6px;`;
+    li.prepend(dot);
+  });
+  // Remove the ::before pseudo (already done via JS dot)
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => {
+      b.style.width = b.dataset.w + '%';
+    });
+  }, 350);
+}
+
+function restart() {
+  cur = 0;
+  answers = [];
+  buildQuestions(); // re-shuffle
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  render();
+}
+</script>
+</body>
+</html>
